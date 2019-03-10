@@ -1,3 +1,6 @@
+from Callbacks import *
+
+
 class RecipePanel:
     def __init__(self, name, frame, callback, slider_list, variable_list):
         self.name = name
