@@ -9,8 +9,16 @@ def create_root():
     return root
 
 
+def create_input_frame():
+    input_frame = tk.LabelFrame(master=root,
+                                text="Input")
+    input_frame.grid(row=0, column=0)
+    return input_frame
+
+
 def create_output_frame():
-    output_frame = tk.Frame(master=root)
+    output_frame = tk.LabelFrame(master=root,
+                                 text="Output")
     output_frame.grid(row=0, column=1)
     return output_frame
 
@@ -40,6 +48,7 @@ def create_sequence_frame():
 
 
 root = create_root()
+input_frame = create_input_frame()
 output_frame = create_output_frame()
 filter_frame = create_filter_frame()
 sequence_frame = create_sequence_frame()
@@ -54,6 +63,6 @@ input_im = None
 input_imtk = None
 output_im = None
 output_imtk = None
-load_filename = None
+load_filename = "C:/Users/v_sam/Documents/Images/cat.jpg"
 save_filename = None
 sequence_mode = False

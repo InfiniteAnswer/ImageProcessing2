@@ -101,6 +101,39 @@ class generate_filter_frame:
         callback()
 
 
+class generate_input_frame:
+    def __init__(self):
+        input_label = tk.Label(master=Shared.input_frame,
+                               image=Shared.input_imtk,
+                               )
+        input_label.grid(row=0, column=0)
+        load_button = tk.Button(master=Shared.input_frame,
+                                text="Load",
+                                command=load_file_callback)
+        load_button.grid(row=1, column=0)
+        Shared.input_frame.widget_dict = dict()
+        Shared.input_frame.widget_dict["input_label"] = input_label
+        Shared.input_frame.widget_dict["load_button"] = load_button
+
+
+class generate_output_frame:
+    def __init__(self):
+        output_label = tk.Label(master=Shared.output_frame,
+                               image=Shared.output_imtk,
+                               )
+        output_label.grid(row=0, column=0)
+        save_button = tk.Button(master=Shared.output_frame,
+                                text="Load",
+                                command=save_file_callback)
+        save_button.grid(row=1, column=0)
+        Shared.output_frame.widget_dict = dict()
+        Shared.output_frame.widget_dict["output_label"] = output_label
+        Shared.output_frame.widget_dict["save_button"] = save_button
+
+
 def initialise():
     generate_recipe_panels()
+    generate_input_frame()
+    generate_output_frame()
     Shared.filter_frame_contents = generate_filter_frame()
+    print(Shared.input_frame.widget_dict)
