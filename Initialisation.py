@@ -44,48 +44,52 @@ def generate_recipe_panels():
 
 
 class generate_filter_frame:
-    def __init__(self):
-        self.generate_filter_recipe_listbox()
-        self.generate_filter_controls()
+    listbox = None
+    filter_controls_frame = None
 
-    def generate_filter_controls(self):
-        self.filter_controls_frame = tk.Frame(master=Shared.filter_frame)
-        self.filter_controls_frame.grid(row=0, column=1, sticky=tk.NW)
-        self.add_button = tk.Button(master=self.filter_controls_frame,
+    def __init__(self):
+        listbox = generate_filter_frame.generate_filter_recipe_listbox()
+        filter_controls_frame, widget_dict = generate_filter_frame.generate_filter_controls()
+        filter_controls_frame.widget_dict = widget_dict
+
+    @staticmethod
+    def generate_filter_controls():
+        filter_controls_frame = tk.Frame(master=Shared.filter_frame)
+        filter_controls_frame.grid(row=0, column=1, sticky=tk.NW)
+        add_button = tk.Button(master=filter_controls_frame,
                                     text="Add",
                                     command=add_button_callback)
-        self.output_as_input_button = tk.Button(master=self.filter_controls_frame,
+        output_as_input_button = tk.Button(master=filter_controls_frame,
                                                 text="Use output as input",
                                                 command=use_output_as_input_callback)
-        self.sequence_mode_variable = tk.IntVar()
-        self.sequence_mode_variable.set(1)
-        self.single_filter_mode_button = tk.Radiobutton(master=self.filter_controls_frame,
+        sequence_mode_variable = tk.IntVar()
+        sequence_mode_variable.set(1)
+        single_filter_mode_button = tk.Radiobutton(master=filter_controls_frame,
                                                         text="Single filter",
-                                                        variable=self.sequence_mode_variable,
+                                                        variable=sequence_mode_variable,
                                                         value=1,
                                                         command=mode_callback)
-        self.sequence_mode_button = tk.Radiobutton(master=self.filter_controls_frame,
+        sequence_mode_button = tk.Radiobutton(master=filter_controls_frame,
                                                    text="Sequence",
-                                                   variable=self.sequence_mode_variable,
+                                                   variable=sequence_mode_variable,
                                                    value=2,
                                                    command=mode_callback)
-        self.dummy_layout_spacer = tk.Frame(master=self.filter_controls_frame)
+        dummy_layout_spacer = tk.Frame(master=filter_controls_frame)
 
-        self.add_button.pack(anchor=tk.NW, fill=tk.X)
-        self.output_as_input_button.pack(anchor=tk.NW)
-        self.dummy_layout_spacer.pack(anchor=tk.NW, pady=PADY)
-        self.single_filter_mode_button.pack(anchor=tk.NW)
-        self.sequence_mode_button.pack(anchor=tk.NW)
+        add_button.pack(anchor=tk.NW, fill=tk.X)
+        output_as_input_button.pack(anchor=tk.NW)
+        dummy_layout_spacer.pack(anchor=tk.NW, pady=PADY)
+        single_filter_mode_button.pack(anchor=tk.NW)
+        sequence_mode_button.pack(anchor=tk.NW)
+        widget_dict = dict()
+        widget_dict["add_button"] = add_button
+        widget_dict["output_as_input_button"] = output_as_input_button
+        widget_dict["single_filter_mode_button"] = single_filter_mode_button
+        widget_dict["sequence_mode_button"] = sequence_mode_button
+        return (filter_controls_frame, widget_dict)
 
-    def generate_filter_recipe_listbox(self):
-        self.listbox = tk.Listbox(master=Shared.filter_frame,
-                                  height=int(HEIGHT_FILTER_FRAME / FONT_POINTS_2_PIXELS))
-        self.listbox.grid(row=0, column=0, sticky=tk.NW, padx=PADX)
-        self.listbox.bind('<<ListboxSelect>>', self.filter_listbox_onselect)
-        for key in Shared.recipe_panels:
-            self.listbox.insert(tk.END, key)
-
-    def filter_listbox_onselect(self, evt):
+    @staticmethod
+    def filter_listbox_onselect(evt):
         widget = evt.widget
         index = int(widget.curselection()[0])
         selected_recipe_name = widget.get(index)
@@ -99,6 +103,16 @@ class generate_filter_frame:
         Shared.recipe_panels[selected_recipe_name].frame.grid()
         Shared.current_selected_filter = selected_recipe_name
         callback()
+
+    @staticmethod
+    def generate_filter_recipe_listbox():
+        listbox = tk.Listbox(master=Shared.filter_frame,
+                                  height=int(HEIGHT_FILTER_FRAME / FONT_POINTS_2_PIXELS))
+        listbox.grid(row=0, column=0, sticky=tk.NW, padx=PADX)
+        listbox.bind('<<ListboxSelect>>', generate_filter_frame.filter_listbox_onselect)
+        for key in Shared.recipe_panels:
+            listbox.insert(tk.END, key)
+        return listbox
 
 
 class generate_input_frame:
